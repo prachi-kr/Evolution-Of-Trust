@@ -1,4 +1,4 @@
-enum Input{
+enum Input {
     CHEAT,
     COOPERATE
 }

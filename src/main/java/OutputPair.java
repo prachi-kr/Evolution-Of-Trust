@@ -4,12 +4,12 @@ public class OutputPair {
     int FirstOutput;
     int SecondOutput;
 
-    public OutputPair(int firstOutput, int secondOutput) {
+    OutputPair(int firstOutput, int secondOutput) {
         FirstOutput = firstOutput;
         SecondOutput = secondOutput;
     }
 
-    public OutputPair() {
+    OutputPair() {
 
     }
 

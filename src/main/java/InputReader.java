@@ -1,5 +1,8 @@
 import java.io.IOException;
 
 public interface InputReader {
-    InputPair read() throws IOException;
+
+    InputPair readInputPair() throws IOException;
+
+    Input readSingleInput() throws IOException;
 }

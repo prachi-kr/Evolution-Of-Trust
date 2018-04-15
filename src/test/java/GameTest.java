@@ -14,30 +14,206 @@ import static org.mockito.Mockito.when;
 public class GameTest {
 
     @Mock
-    private InputReader reader;
+    private UserPlayerBehaviour userPlayerBehaviour;
+
 
     @Test
-    public void shouldReturn0_0ForCHEATCHEAT() throws IOException {
-        Game game = new Game(reader, 1);
-        when(reader.read()).thenReturn(new InputPair(Input.CHEAT, Input.CHEAT));
+    public void shouldReturnCorrectScoreForDetectivePlayerAndGrudgerPlayer() throws IOException {
+        Game game = new Game(new Player(new DetectivePlayerBehaviour()), new Player(new GrudgerPlayerBehaviour()), 7);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
         game.start();
 
-        assertEquals("0,0\n", outputStream.toString());
+        assertEquals("3,7\n", outputStream.toString());
     }
 
     @Test
-    public void shouldReturn2_2ForCOOPERATECOOPERATE() throws IOException {
-        Game game = new Game(reader, 1);
-        when(reader.read()).thenReturn(new InputPair(Input.COOPERATE, Input.COOPERATE));
+    public void shouldReturnCorrectScoreForDetectivePlayerAndCopyCatPlayer() throws IOException {
+        Game game = new Game(new Player(new DetectivePlayerBehaviour()), new Player(new CopyCatPlayerBehaviour()), 6);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
         game.start();
 
-        assertEquals("2,\n", outputStream.toString());
+        assertEquals("8,8\n", outputStream.toString());
     }
 
+    @Test
+    public void shouldReturnCorrectScoreForDetectivePlayerAndCooperativePlayer() throws IOException {
+        Game game = new Game(new Player(new DetectivePlayerBehaviour()), new Player(new CooperativePlayerBehaviour()), 5);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        game.start();
+
+        assertEquals("12,4\n", outputStream.toString());
+    }
+
+    @Test
+    public void shouldReturnCorrectScoreForDetectivePlayerAndCheaterPlayer() throws IOException {
+        Game game = new Game(new Player(new DetectivePlayerBehaviour()), new Player(new CheaterPlayerBehaviour()), 5);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        game.start();
+
+        assertEquals("-3,9\n", outputStream.toString());
+    }
+
+    @Test
+    public void shouldReturnCorrectScoreForGrudgerPlayerAndCopyCatPlayerPlayer() throws IOException {
+        Game game = new Game(new Player(new GrudgerPlayerBehaviour()), new Player(new CopyCatPlayerBehaviour()), 5);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        game.start();
+
+        assertEquals("10,10\n", outputStream.toString());
+    }
+
+    @Test
+    public void shouldReturnCorrectScoreForGrudgerPlayerAndCheaterPlayerPlayer() throws IOException {
+        Game game = new Game(new Player(new GrudgerPlayerBehaviour()), new Player(new CheaterPlayerBehaviour()), 7);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        game.start();
+
+        assertEquals("-1,3\n", outputStream.toString());
+    }
+
+    @Test
+    public void shouldReturnCorrectScoreForGrudgerPlayerAndCooperativePlayer() throws IOException {
+        Game game = new Game(new Player(new GrudgerPlayerBehaviour()), new Player(new CooperativePlayerBehaviour()), 6);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        game.start();
+
+        assertEquals("12,12\n", outputStream.toString());
+    }
+
+    @Test
+    public void shouldReturnCorrectScoreForCopyCatPlayerAndCheaterPlayer() throws IOException {
+        Game game = new Game(new Player(new CopyCatPlayerBehaviour()), new Player(new CheaterPlayerBehaviour()), 7);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        game.start();
+
+        assertEquals("-1,3\n", outputStream.toString());
+    }
+
+    @Test
+    public void shouldReturnCorrectScoreForCopyCatPlayerAndCooperativePlayer() throws IOException {
+        Game game = new Game(new Player(new CopyCatPlayerBehaviour()), new Player(new CooperativePlayerBehaviour()), 6);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        game.start();
+
+        assertEquals("12,12\n", outputStream.toString());
+    }
+
+    @Test
+    public void shouldReturnCorrectScoreForCheaterPlayerAndCooperativePlayer() throws IOException {
+        Game game = new Game(new Player(new CheaterPlayerBehaviour()), new Player(new CooperativePlayerBehaviour()), 4);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        game.start();
+
+        assertEquals("12,-4\n", outputStream.toString());
+    }
+
+    @Test
+    public void shouldReturnCorrectScoreForUserPlayerAndCooperativePlayer() throws IOException {
+        Game game = new Game(new Player(userPlayerBehaviour), new Player(new CooperativePlayerBehaviour()), 5);
+        when(userPlayerBehaviour.getInput(Input.COOPERATE)).thenReturn(Input.CHEAT)
+                .thenReturn(Input.CHEAT)
+                .thenReturn(Input.COOPERATE)
+                .thenReturn(Input.CHEAT)
+                .thenReturn(Input.COOPERATE);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        game.start();
+
+        assertEquals("13,1\n", outputStream.toString());
+    }
+
+    @Test
+    public void shouldReturnCorrectScoreForUserPlayerAndCheaterPlayer() throws IOException {
+        Game game = new Game(new Player(userPlayerBehaviour), new Player(new CheaterPlayerBehaviour()), 6);
+        when(userPlayerBehaviour.getInput(Input.CHEAT)).thenReturn(Input.CHEAT)
+                .thenReturn(Input.CHEAT)
+                .thenReturn(Input.COOPERATE)
+                .thenReturn(Input.CHEAT)
+                .thenReturn(Input.COOPERATE)
+                .thenReturn(Input.COOPERATE);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        game.start();
+
+        assertEquals("-3,9\n", outputStream.toString());
+    }
+
+    @Test
+    public void shouldReturnCorrectScoreForUserPlayerAndGrudgerPlayer() throws IOException {
+        Game game = new Game(new Player(userPlayerBehaviour), new Player(new GrudgerPlayerBehaviour()), 4);
+        when(userPlayerBehaviour.getInput(Input.COOPERATE)).thenReturn(Input.CHEAT)
+                .thenReturn(Input.CHEAT)
+                .thenReturn(Input.COOPERATE)
+                .thenReturn(Input.CHEAT);
+        when(userPlayerBehaviour.getInput(Input.CHEAT)).thenReturn(Input.CHEAT)
+                .thenReturn(Input.CHEAT)
+                .thenReturn(Input.COOPERATE)
+                .thenReturn(Input.COOPERATE);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        game.start();
+
+        assertEquals("3,-1\n", outputStream.toString());
+    }
+
+    @Test
+    public void shouldReturnCorrectScoreForUserPlayerAndDetectivePlayer() throws IOException {
+        Game game = new Game(new Player(userPlayerBehaviour), new Player(new DetectivePlayerBehaviour()), 5);
+        when(userPlayerBehaviour.getInput(Input.COOPERATE)).thenReturn(Input.CHEAT)
+                .thenReturn(Input.CHEAT)
+                .thenReturn(Input.COOPERATE)
+                .thenReturn(Input.CHEAT);
+        when(userPlayerBehaviour.getInput(Input.CHEAT)).thenReturn(Input.CHEAT)
+                .thenReturn(Input.CHEAT)
+                .thenReturn(Input.COOPERATE)
+                .thenReturn(Input.COOPERATE);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        game.start();
+
+        assertEquals("8,0\n", outputStream.toString());
+    }
+
+    @Test
+    public void shouldReturnCorrectScoreForUserPlayerAndCopyCatPlayer() throws IOException {
+        Game game = new Game(new Player(userPlayerBehaviour), new Player(new CopyCatPlayerBehaviour()), 5);
+        when(userPlayerBehaviour.getInput(Input.COOPERATE)).thenReturn(Input.CHEAT)
+                .thenReturn(Input.CHEAT)
+                .thenReturn(Input.COOPERATE)
+                .thenReturn(Input.CHEAT);
+        when(userPlayerBehaviour.getInput(Input.CHEAT)).thenReturn(Input.CHEAT)
+                .thenReturn(Input.CHEAT)
+                .thenReturn(Input.COOPERATE)
+                .thenReturn(Input.COOPERATE);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        game.start();
+
+        assertEquals("2,2\n", outputStream.toString());
+    }
 }
