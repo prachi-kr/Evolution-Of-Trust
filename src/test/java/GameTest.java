@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -130,7 +131,7 @@ public class GameTest {
     @Test
     public void shouldReturnCorrectScoreForUserPlayerAndCooperativePlayer() throws IOException {
         Game game = new Game(new Player(userPlayerBehaviour), new Player(new CooperativePlayerBehaviour()), 5);
-        when(userPlayerBehaviour.getInput(Input.COOPERATE)).thenReturn(Input.CHEAT)
+        when(userPlayerBehaviour.getInput(any())).thenReturn(Input.CHEAT)
                 .thenReturn(Input.CHEAT)
                 .thenReturn(Input.COOPERATE)
                 .thenReturn(Input.CHEAT)
@@ -146,7 +147,7 @@ public class GameTest {
     @Test
     public void shouldReturnCorrectScoreForUserPlayerAndCheaterPlayer() throws IOException {
         Game game = new Game(new Player(userPlayerBehaviour), new Player(new CheaterPlayerBehaviour()), 6);
-        when(userPlayerBehaviour.getInput(Input.CHEAT)).thenReturn(Input.CHEAT)
+        when(userPlayerBehaviour.getInput(any())).thenReturn(Input.CHEAT)
                 .thenReturn(Input.CHEAT)
                 .thenReturn(Input.COOPERATE)
                 .thenReturn(Input.CHEAT)
@@ -163,33 +164,25 @@ public class GameTest {
     @Test
     public void shouldReturnCorrectScoreForUserPlayerAndGrudgerPlayer() throws IOException {
         Game game = new Game(new Player(userPlayerBehaviour), new Player(new GrudgerPlayerBehaviour()), 4);
-        when(userPlayerBehaviour.getInput(Input.COOPERATE)).thenReturn(Input.CHEAT)
-                .thenReturn(Input.CHEAT)
+        when(userPlayerBehaviour.getInput(any())).thenReturn(Input.COOPERATE)
                 .thenReturn(Input.COOPERATE)
+                .thenReturn(Input.CHEAT)
                 .thenReturn(Input.CHEAT);
-        when(userPlayerBehaviour.getInput(Input.CHEAT)).thenReturn(Input.CHEAT)
-                .thenReturn(Input.CHEAT)
-                .thenReturn(Input.COOPERATE)
-                .thenReturn(Input.COOPERATE);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
         game.start();
 
-        assertEquals("3,-1\n", outputStream.toString());
+        assertEquals("7,3\n", outputStream.toString());
     }
 
     @Test
     public void shouldReturnCorrectScoreForUserPlayerAndDetectivePlayer() throws IOException {
-        Game game = new Game(new Player(userPlayerBehaviour), new Player(new DetectivePlayerBehaviour()), 5);
-        when(userPlayerBehaviour.getInput(Input.COOPERATE)).thenReturn(Input.CHEAT)
+        Game game = new Game(new Player(userPlayerBehaviour), new Player(new DetectivePlayerBehaviour()), 4);
+        when(userPlayerBehaviour.getInput(any())).thenReturn(Input.CHEAT)
                 .thenReturn(Input.CHEAT)
                 .thenReturn(Input.COOPERATE)
                 .thenReturn(Input.CHEAT);
-        when(userPlayerBehaviour.getInput(Input.CHEAT)).thenReturn(Input.CHEAT)
-                .thenReturn(Input.CHEAT)
-                .thenReturn(Input.COOPERATE)
-                .thenReturn(Input.COOPERATE);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
@@ -200,12 +193,8 @@ public class GameTest {
 
     @Test
     public void shouldReturnCorrectScoreForUserPlayerAndCopyCatPlayer() throws IOException {
-        Game game = new Game(new Player(userPlayerBehaviour), new Player(new CopyCatPlayerBehaviour()), 5);
-        when(userPlayerBehaviour.getInput(Input.COOPERATE)).thenReturn(Input.CHEAT)
-                .thenReturn(Input.CHEAT)
-                .thenReturn(Input.COOPERATE)
-                .thenReturn(Input.CHEAT);
-        when(userPlayerBehaviour.getInput(Input.CHEAT)).thenReturn(Input.CHEAT)
+        Game game = new Game(new Player(userPlayerBehaviour), new Player(new CopyCatPlayerBehaviour()), 4);
+        when(userPlayerBehaviour.getInput(any())).thenReturn(Input.CHEAT)
                 .thenReturn(Input.CHEAT)
                 .thenReturn(Input.COOPERATE)
                 .thenReturn(Input.COOPERATE);
@@ -214,6 +203,6 @@ public class GameTest {
 
         game.start();
 
-        assertEquals("2,2\n", outputStream.toString());
+        assertEquals("4,4\n", outputStream.toString());
     }
 }
