@@ -1,4 +1,8 @@
 import java.util.Objects;
+import java.util.function.IntConsumer;
+import java.util.function.Supplier;
+
+
 
 public class OutputPair {
     int FirstOutput;
@@ -26,5 +30,10 @@ public class OutputPair {
     public int hashCode() {
 
         return Objects.hash(FirstOutput, SecondOutput);
+    }
+
+
+    public void workWithOutput(IntConsumer consumer, boolean isFirstOutput) {
+        consumer.accept(isFirstOutput ? FirstOutput : SecondOutput);
     }
 }

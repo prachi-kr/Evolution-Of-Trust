@@ -25,8 +25,8 @@ class Game {
     }
 
     private void addScore(OutputPair outputPair) {
-        firstPlayer.addToScore(outputPair.FirstOutput);
-        secondPlayer.addToScore(outputPair.SecondOutput);
+        outputPair.workWithOutput(firstPlayer::addToScore, true);
+        outputPair.workWithOutput(secondPlayer::addToScore, false);
     }
 
     private void displayScore() {
